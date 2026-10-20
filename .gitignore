@@ -1,0 +1,29 @@
+# ===== Secrets (API keys) =====
+.env
+
+# ===== Python =====
+.venv/
+__pycache__/
+*.pyc
+
+# ===== LIVE MALWARE - NEVER COMMIT =====
+samples/
+*.exe
+*.dll
+*.bin
+*.scr
+*.sys
+*.zip
+*.7z
+*.rar
+
+# ===== Cuckoo outputs (large / may contain payloads) =====
+*.pcap
+*.pcapng
+cuckoo_results/
+dropped/
+
+# ===== OS / editor =====
+.DS_Store
+Thumbs.db
+.vscode/

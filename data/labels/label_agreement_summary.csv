@@ -1,0 +1,11 @@
+final_label,agree,partial,disagree,no_avclass,total,agree_pct,agree_or_partial_pct
+agenttesla,28,10,15,7,60,46.7,63.3
+amadey,37,0,6,17,60,61.7,61.7
+asyncrat,21,18,16,5,60,35.0,65.0
+formbook,28,5,13,14,60,46.7,55.0
+lokibot,12,7,40,1,60,20.0,31.7
+njrat,28,5,21,6,60,46.7,55.0
+redline,13,0,32,15,60,21.7,21.7
+remcos,35,2,12,11,60,58.3,61.7
+smokeloader,36,4,15,5,60,60.0,66.7
+ALL,238,51,170,81,540,44.1,53.5

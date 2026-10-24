@@ -174,12 +174,12 @@ Master table: `data/metadata/samples.csv` (one row per sample, 540 rows).
 
 ### 6.2 Final dataset used for classification
 
-**Scope decision:** because of time constraints, the classifier uses the **4 families
+**Scope decision:** because of time constraints, the classifier uses the **5 families
 that were fully analyzed**. njrat, redline, remcos and smokeloader were selected but not
 analyzed. **LokiBot was excluded**: its 15 unanalyzed samples were all in the val/test
 splits (0 test samples, 3 val samples), so it could not be evaluated fairly.
 
-Only samples with `analysis_status = ok` are used: **4 families, 226 samples**.
+Only samples with `analysis_status = ok` are used: **5 families, 270 samples**.
 
 | Family | Train | Val | Test | Total |
 |---|---|---|---|---|
@@ -187,7 +187,8 @@ Only samples with `analysis_status = ok` are used: **4 families, 226 samples**.
 | amadey | 38 | 9 | 8 | 55 |
 | asyncrat | 39 | 9 | 6 | 54 |
 | formbook | 40 | 9 | 9 | 58 |
-| **Total** | **158** | **36** | **32** | **226** |
+| lokibot | 42 | 9 | 9 | 60 |
+| **Total** | **200** | **45** | **41** | **286** |
 
 Output statistics of the final set (median, min–max):
 
@@ -197,9 +198,10 @@ Output statistics of the final set (median, min–max):
 | amadey | 22,481 (110 – 406,624) | 153 (109 – 469) |
 | asyncrat | 15,892 (391 – 478,902) | 137 (94 – 1,459) |
 | formbook | 8,561 (1,837 – 351,006) | 132 (110 – 789) |
+| lokibot | 10,147 (395 – 402,894) | 162.5 (113 – 238) |
 
-Label agreement in the final set: 107 agree, 31 partial, 45 disagree, 43 no_avclass
-(61.1 % agree or partial).
+Label agreement in the final set: 126 agree, 40 partial, 90 disagree, 44 no_avclass
+(55.3% agree or partial).
 
 ---
 

@@ -179,7 +179,7 @@ that were fully analyzed**. njrat, redline, remcos and smokeloader were selected
 analyzed. **LokiBot was excluded**: its 15 unanalyzed samples were all in the val/test
 splits (0 test samples, 3 val samples), so it could not be evaluated fairly.
 
-Only samples with `analysis_status = ok` are used: **5 families, 270 samples**.
+Only samples with `analysis_status = ok` are used: **5 families, 286 samples**.
 
 | Family | Train | Val | Test | Total |
 |---|---|---|---|---|

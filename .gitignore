@@ -27,3 +27,6 @@ dropped/
 .DS_Store
 Thumbs.db
 .vscode/
+
+# ===== LibreOffice lock files =====
+.~lock.*

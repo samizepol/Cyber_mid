@@ -1,3 +1,5 @@
+# Ubuntu/Cuckoo lab machine only: scripts 05-07. Kept minimal for its older Python.
+# Install: pip install -r requirements-lab.txt
 requests
 python-dotenv
 pyzipper

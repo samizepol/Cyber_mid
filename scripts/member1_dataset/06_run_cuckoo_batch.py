@@ -2,9 +2,9 @@
 """Submit verified samples to Cuckoo 2.0.7 (REST API), wait for each analysis,
 save report / pcap / API trace outside the repo, and fill samples.csv.
 
-  python scripts/member1_dataset/run_cuckoo_batch.py --only S0001   # smoke test
-  python scripts/member1_dataset/run_cuckoo_batch.py                # everything pending
-  python scripts/member1_dataset/run_cuckoo_batch.py --retry-failed # redo status=failed
+  python scripts/member1_dataset/06_run_cuckoo_batch.py --only S0001   # smoke test
+  python scripts/member1_dataset/06_run_cuckoo_batch.py                # everything pending
+  python scripts/member1_dataset/06_run_cuckoo_batch.py --retry-failed # redo status=failed
 """
 import argparse
 import json

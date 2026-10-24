@@ -6,7 +6,7 @@ Queries the MalwareBazaar API for candidate malware samples of each chosen famil
 and saves their METADATA ONLY (hashes, family signature, file type, dates) to a CSV.
 
 SAFE TO RUN ON THE MAIN OS: this script never downloads malware binaries.
-Binaries are downloaded later by 04_download_samples.py, on the VM machine only.
+Binaries are downloaded later by 05_download_samples.py, on the VM machine only.
 
 Usage (from the repo root):
     python scripts/member1_dataset/01_query_candidates.py

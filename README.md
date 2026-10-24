@@ -22,8 +22,23 @@ docs/dataset.md            # Dataset documentation and limitations
 - API keys go in `.env` (see `.env.example`); `.env` is gitignored.
 
 ## Setup
+There are two requirements files, one per machine:
+
+| File | Machine | Scripts |
+|---|---|---|
+| `requirements.txt` | Main computer (Windows) | 01–04: metadata, VirusTotal, AVClass |
+| `requirements-lab.txt` | Ubuntu/Cuckoo lab machine | 05–07: kept minimal for its older Python |
+
+Main computer:
 ```bash
 python -m venv .venv
-.venv\Scripts\activate          # Windows  (Linux: source .venv/bin/activate)
+.venv\Scripts\activate
 pip install -r requirements.txt
+```
+
+Lab machine:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements-lab.txt
 ```

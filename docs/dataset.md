@@ -119,11 +119,11 @@ Master table: `data/metadata/samples.csv` (one row per sample, 540 rows).
 | `label_agreement` | agree / partial / disagree / no_avclass | 04 |
 | `final_label` | Label used by the models | 04 |
 | `split` | train / val / test | 02 |
-| `download_date`, `sha256_verified` | Sample retrieval on the VM machine | VM stage |
-| `assigned_member` | Team member who ran the analysis | VM stage |
-| `execution_id` | **Cuckoo task ID** — links the API trace and the pcap of the same run | VM stage |
-| `analysis_date`, `analysis_status` | ok / failed / no_network / evasive | VM stage |
-| `api_call_count`, `pcap_packets` | Basic output statistics | VM stage |
+| `download_date`, `sha256_verified` | Sample retrieval on the VM machine | 05 |
+| `assigned_member` | Team member who ran the analysis | 06 |
+| `execution_id` | **Cuckoo task ID** — links the API trace and the pcap of the same run | 06 |
+| `analysis_date`, `analysis_status` | ok / failed / no_network / evasive | 06 |
+| `api_call_count`, `pcap_packets` | Basic output statistics | 06 |
 | `notes` | Free text | any |
 
 ---
@@ -153,9 +153,53 @@ Master table: `data/metadata/samples.csv` (one row per sample, 540 rows).
 | VirusTotal report available | 540 / 540 |
 | Samples per family | 60 each (balanced) |
 | Selection reproducible (same seed → identical file) | Yes |
-| Downloaded file hash matches `sha256` | *To be completed on the VM machine* |
-| Cuckoo run has both API trace and non-empty pcap | *To be completed after Cuckoo runs* |
-| Valid samples per family after Cuckoo | *To be completed* |
+| Downloaded file hash matches `sha256` | 540 / 540 verified |
+| Cuckoo runs recorded (unique `execution_id`) | 285 runs, 0 duplicate task IDs (23–24 Oct 2026) |
+| `ok` runs have both API calls and a non-empty pcap | 270 / 270 |
+
+### 6.1 Cuckoo analysis results (all families)
+
+| Family | ok | failed | evasive | not run |
+|---|---|---|---|---|
+| agenttesla | 59 | 1 | 0 | 0 |
+| amadey | 55 | 2 | 3 | 0 |
+| asyncrat | 54 | 3 | 3 | 0 |
+| formbook | 58 | 1 | 1 | 0 |
+| lokibot | 44 | 1 | 0 | 15 |
+| njrat | 0 | 0 | 0 | 60 |
+| redline | 0 | 0 | 0 | 60 |
+| remcos | 0 | 0 | 0 | 60 |
+| smokeloader | 0 | 0 | 0 | 60 |
+| **Total** | **270** | **8** | **7** | **255** |
+
+### 6.2 Final dataset used for classification
+
+**Scope decision:** because of time constraints, the classifier uses the **4 families
+that were fully analyzed**. njrat, redline, remcos and smokeloader were selected but not
+analyzed. **LokiBot was excluded**: its 15 unanalyzed samples were all in the val/test
+splits (0 test samples, 3 val samples), so it could not be evaluated fairly.
+
+Only samples with `analysis_status = ok` are used: **4 families, 226 samples**.
+
+| Family | Train | Val | Test | Total |
+|---|---|---|---|---|
+| agenttesla | 41 | 9 | 9 | 59 |
+| amadey | 38 | 9 | 8 | 55 |
+| asyncrat | 39 | 9 | 6 | 54 |
+| formbook | 40 | 9 | 9 | 58 |
+| **Total** | **158** | **36** | **32** | **226** |
+
+Output statistics of the final set (median, min–max):
+
+| Family | API calls | PCAP packets |
+|---|---|---|
+| agenttesla | 11,243 (942 – 108,526) | 135 (103 – 287) |
+| amadey | 22,481 (110 – 406,624) | 153 (109 – 469) |
+| asyncrat | 15,892 (391 – 478,902) | 137 (94 – 1,459) |
+| formbook | 8,561 (1,837 – 351,006) | 132 (110 – 789) |
+
+Label agreement in the final set: 107 agree, 31 partial, 45 disagree, 43 no_avclass
+(61.1 % agree or partial).
 
 ---
 
@@ -179,3 +223,14 @@ Master table: `data/metadata/samples.csv` (one row per sample, 540 rows).
    results may not generalize to other families or sources.
 8. **Single sandbox configuration.** All samples are analyzed with one guest OS,
    timeout and network setting.
+9. **Reduced scope.** Only 4 of the 9 selected families were used (226 samples). Four
+   families were not analyzed in time and LokiBot was excluded because none of its test
+   samples were analyzed. Results apply to these 4 families only.
+10. **Small evaluation set.** The test split has 32 samples (asyncrat only 6), so test
+    accuracy has high variance; results should be reported per family and, ideally,
+    with cross-validation on train + val.
+11. **Failed and evasive runs.** 8 runs failed and 7 were marked evasive (mostly amadey and
+    asyncrat). Excluding them may bias the dataset toward samples that behave normally in
+    the sandbox.
+12. **Wide range of API-call counts.** API calls per sample vary from about 100 to
+    almost 480,000, so models need sequence truncation or normalization.

@@ -3,8 +3,8 @@
 verify every file against the SHA-256 in the CSV, and fill sha256_verified /
 download_date. Run ONLY on the Ubuntu/Cuckoo VM (never on the school network).
 
-  python scripts/member1_dataset/download_samples.py            # all rows
-  python scripts/member1_dataset/download_samples.py --limit 3   # quick test
+  python scripts/member1_dataset/05_download_samples.py            # all rows
+  python scripts/member1_dataset/05_download_samples.py --limit 3   # quick test
 """
 import argparse
 import io

@@ -30,3 +30,10 @@ Thumbs.db
 
 # ===== LibreOffice lock files =====
 .~lock.*
+
+# Local network malware datasets and generated models
+data/network/
+
+# Python temporary files
+__pycache__/
+*.py[cod]

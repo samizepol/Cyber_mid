@@ -1,0 +1,2 @@
+method,random_state,samples,oof_accuracy,oof_macro_f1
+StratifiedKFold_5,42,269,0.5576208178438662,0.5594284783963589

@@ -1,0 +1,6 @@
+method,only_api_right,only_method_right,p_value
+network_only,64,27,0.0001
+mean,18,22,0.6358
+product,25,31,0.5044
+weighted,9,18,0.1221
+stacking,16,14,0.8555

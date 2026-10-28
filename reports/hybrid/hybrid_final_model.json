@@ -1,0 +1,15 @@
+{
+  "method":"weighted",
+  "api_model":"tfidf_lr",
+  "api_weight":0.7,
+  "network_weight":0.3,
+  "families":[
+    "agenttesla",
+    "amadey",
+    "asyncrat",
+    "formbook",
+    "lokibot"
+  ],
+  "rule":"p = api_weight * p_api + network_weight * p_net; predicted family = argmax(p)",
+  "trained_on_samples":269
+}

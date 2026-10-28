@@ -37,3 +37,6 @@ data/network/
 # Python temporary files
 __pycache__/
 *.py[cod]
+
+# Derived API sequences (21 MB, shared via Drive)
+data/api/

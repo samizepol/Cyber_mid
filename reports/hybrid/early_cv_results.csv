@@ -1,0 +1,3 @@
+method,accuracy_mean,accuracy_std,macro_f1_mean,macro_f1_std,delta_macro_f1_vs_api_mean,delta_macro_f1_vs_api_std,folds_better_than_api,folds_total
+api_features,0.6841,0.0583,0.6729,0.0635,0.0,0.0,0,50
+api_features+net_proba,0.6877,0.0643,0.6804,0.0665,0.0075,0.0445,28,50

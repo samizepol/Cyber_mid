@@ -88,6 +88,34 @@ def main():
     fig.savefig(cfg.FIG_DIR / "f1_by_family.png", dpi=200)
     plt.close(fig)
 
+    # 4) Late vs. early fusion in one chart (only if 03_early_fusion.py has been run).
+    #    Both scripts use the same outer folds, but the API baseline differs slightly:
+    #    late fusion uses Member 2's OOF probabilities, early fusion re-trains the model.
+    if cfg.EARLY_CV_RESULTS.exists():
+        early = pd.read_csv(cfg.EARLY_CV_RESULTS)
+        rows = [("API (Member 2 OOF)", "late", summary.set_index("method").loc["api_only"]),
+                ("Network (Member 3 OOF)", "late", summary.set_index("method").loc["network_only"]),
+                ("Late: " + LABELS[best], "late", summary.set_index("method").loc[best])]
+        rows += [("Early: " + m.replace("api_features", "API feat.").replace("net_", "net "), "early", r)
+                 for m, r in early.set_index("method").iterrows()]
+        fig, ax = plt.subplots(figsize=(9, 4.2))
+        names = [r[0] for r in rows]
+        means = [r[2]["macro_f1_mean"] for r in rows]
+        stds = [r[2]["macro_f1_std"] for r in rows]
+        # early API-only re-run is a baseline -> pale orange
+        colors = ["#9e9e9e", "#9e9e9e", "#1f77b4"] + [
+            "#fdd0a2" if m == "api_features" else "#ff7f0e" for m in early["method"]]
+        ax.bar(names, means, yerr=stds, capsize=4, color=colors)
+        for i, (v, s) in enumerate(zip(means, stds)):
+            ax.text(i, v + s + 0.015, "%.3f" % v, ha="center", va="bottom", fontsize=8)
+        ax.set_ylabel("Macro-F1 (mean ± std)")
+        ax.set_ylim(0, 1)
+        ax.set_title("Late fusion (blue) vs. early fusion (orange), same folds")
+        plt.setp(ax.get_xticklabels(), rotation=20, ha="right")
+        fig.tight_layout()
+        fig.savefig(cfg.FIG_DIR / "late_vs_early.png", dpi=200)
+        plt.close(fig)
+
     print("best hybrid:", best)
     print("Saved figures to", cfg.FIG_DIR)
 

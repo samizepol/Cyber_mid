@@ -214,7 +214,19 @@ def main():
     print("\n== McNemar exact test vs. api_only (first repeat) ==")
     print(tests.to_string(index=False))
 
-    print("\nSaved:", cfg.CV_RESULTS, cfg.FOLD_RESULTS, cfg.PREDICTIONS, cfg.PER_FAMILY, cfg.MCNEMAR, sep="\n  ")
+    # Final hybrid model: the weight chosen on ALL samples (what you would deploy).
+    # Its score is not reported here - the CV numbers above are the honest estimate.
+    everything = np.arange(len(y))
+    _, w_final = fuse("weighted", everything, everything, p_api, p_net, y, families)
+    final = {"method": "weighted", "api_model": pd.read_csv(cfg.API_OOF, nrows=1)["best_model"].iloc[0],
+             "api_weight": w_final, "network_weight": round(1 - w_final, 2), "families": families,
+             "rule": "p = api_weight * p_api + network_weight * p_net; predicted family = argmax(p)",
+             "trained_on_samples": int(len(y))}
+    pd.Series(final).to_json(cfg.FINAL_MODEL, indent=2)
+    print("\nfinal weighted model: API weight %.2f (fitted on all %d samples)" % (w_final, len(y)))
+
+    print("\nSaved:", cfg.CV_RESULTS, cfg.FOLD_RESULTS, cfg.PREDICTIONS, cfg.PER_FAMILY, cfg.MCNEMAR,
+          cfg.FINAL_MODEL, sep="\n  ")
 
 
 if __name__ == "__main__":

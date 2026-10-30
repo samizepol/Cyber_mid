@@ -1,4 +1,13 @@
+"""
+plot_network_results.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Figures for the earlier network experiment (final_evaluation_network.py): a confusion matrix
+with counts in every cell and a bar chart of the F1-score per family, both saved to
+reports/network/figures/.
+
+Usage:  python plot_network_results.py
+"""
 import os
 import pandas as pd
 import numpy as np
@@ -59,6 +68,7 @@ pred = pd.read_csv(PREDICTIONS)
 families = sorted(pred["family"].unique())
 f1_values = []
 
+# F1 = 2PR / (P + R), computed per family from the saved predictions
 for family in families:
     true_positive = (
         (pred["family"] == family) &

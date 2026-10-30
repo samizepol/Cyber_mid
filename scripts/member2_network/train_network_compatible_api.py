@@ -1,4 +1,20 @@
+"""
+train_network_compatible_api.py
+Member 3 - Network-Traffic Classification (Step 2) - FINAL network model
 
+Trains the network classifier on exactly the samples, labels and splits used by the API
+classifier, so that both models can be compared and combined (Step 3, hybrid).
+  1. Checks that the network dataset and the API out-of-fold file contain the same samples,
+     with the same family and split.
+  2. Keeps samples with a valid pcap (pcap_status == ok) -> 269 samples.
+  3. Random forest on 11 traffic statistics, stratified 5-fold CV (seed 42, the same
+     protocol as the API model) -> out-of-fold probabilities for every sample.
+  4. Fits a final model on all samples and saves it.
+Outputs (data/network/): network_oof_predictions_compatible_api.csv (used by the hybrid),
+network_cv_results_compatible_api.csv, network_model_compatible_api.joblib.
+
+Usage (from the repo root):  python scripts/member2_network/train_network_compatible_api.py
+"""
 import os
 from pathlib import Path
 
@@ -28,6 +44,7 @@ CV_OUT = os.path.join(OUT_DIR, "network_cv_results_compatible_api.csv")
 FAMILIES = [
     "agenttesla", "amadey", "asyncrat", "formbook", "lokibot"
 ]
+# The 11 traffic statistics from extract_network_features_step2.py
 FEATURES = [
     "packet_count", "total_bytes", "duration_seconds",
     "average_packet_bytes", "tcp_packets", "udp_packets",
@@ -69,6 +86,7 @@ y = df["family"].astype(str)
 # Stratified five-fold OOF predictions, matching API model's CV approach
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
+# Median imputation (for missing values) + random forest with balanced class weights
 model = Pipeline([
     ("imputer", SimpleImputer(strategy="median")),
     ("classifier", RandomForestClassifier(

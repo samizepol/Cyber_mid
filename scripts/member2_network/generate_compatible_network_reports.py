@@ -1,4 +1,17 @@
+"""
+generate_compatible_network_reports.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Builds the network results for the report from the saved out-of-fold predictions of the
+final model (network_oof_predictions_compatible_api.csv):
+  reports/network/network_cv_results.csv            precision / recall / F1 per family
+  reports/network/network_final_confusion_matrix.csv
+  reports/network/figures/confusion_matrix.png, f1_by_family.png
+  reports/network/RESULTS.md                        summary in Markdown
+No model is trained here; it only evaluates predictions that already exist.
+
+Usage:  python generate_compatible_network_reports.py
+"""
 from pathlib import Path
 
 import pandas as pd
@@ -14,6 +27,7 @@ from sklearn.metrics import (
     f1_score,
 )
 
+# Paths relative to the repository root
 ROOT = Path(__file__).resolve().parents[2]
 DATA = ROOT / "data" / "network"
 OUT = ROOT / "reports" / "network"
@@ -46,6 +60,7 @@ y_pred = df["network_pred"].astype(str).str.lower()
 
 labels = [f for f in families if f in set(y_true)]
 
+# Overall and per-family metrics
 accuracy = accuracy_score(y_true, y_pred)
 macro_f1 = f1_score(
     y_true, y_pred, labels=labels, average="macro", zero_division=0
@@ -64,11 +79,13 @@ pd.DataFrame(report).transpose().to_csv(
     index_label="family",
 )
 
+# Confusion matrix: rows = true family, columns = predicted family
 cm = confusion_matrix(y_true, y_pred, labels=labels)
 pd.DataFrame(
     cm, index=labels, columns=labels
 ).to_csv(OUT / "network_final_confusion_matrix.csv", index_label="actual")
 
+# Figure 1: confusion matrix
 fig, ax = plt.subplots(figsize=(9, 7))
 display = ConfusionMatrixDisplay(
     confusion_matrix=cm, display_labels=labels
@@ -79,6 +96,7 @@ fig.tight_layout()
 fig.savefig(FIGURES / "confusion_matrix.png", dpi=160)
 plt.close(fig)
 
+# Figure 2: F1 per family
 f1_values = [report[f]["f1-score"] for f in labels]
 fig, ax = plt.subplots(figsize=(9, 5))
 ax.bar(labels, f1_values)
@@ -90,6 +108,7 @@ fig.tight_layout()
 fig.savefig(FIGURES / "f1_by_family.png", dpi=160)
 plt.close(fig)
 
+# Markdown summary for the repository
 with open(OUT / "RESULTS.md", "w", encoding="utf-8") as f:
     f.write("# API-Compatible Network Classifier Results\n\n")
     f.write("Evaluation uses the saved out-of-fold (OOF) predictions.\n\n")

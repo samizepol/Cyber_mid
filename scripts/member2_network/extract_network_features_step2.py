@@ -1,12 +1,33 @@
+"""
+extract_network_features_step2.py
+Member 3 - Network-Traffic Classification (Step 2)
+
+First feature extraction: reads every Cuckoo pcap under CUCKOO_ROOT and writes one row of
+basic traffic statistics per analysis to FEATURES_STEP2 (see config.py).
+
+Features per pcap (computed with tshark, Wireshark's command-line tool)
+  packet_count, total_bytes, duration_seconds, average_packet_bytes
+  tcp/udp/dns/http/tls/icmp/other_packets - packets per protocol, using the protocol
+      tshark shows in its "Protocol" column (the highest layer it recognises, e.g. a DNS
+      packet counts as dns, not udp)
+  status - ok, empty (no packets) or error: <message>
+
+These 11 statistics are the features of the final network model
+(train_network_compatible_api.py). Original pcaps are only read, never modified.
+
+Usage (lab machine, needs tshark):  python extract_network_features_step2.py
+"""
 import os
 import csv
 import subprocess
 from collections import Counter
 from config import CUCKOO_ROOT, FEATURES_STEP2
 
+# Input folder with the Cuckoo analyses and output CSV, both set in config.py
 ROOT = str(CUCKOO_ROOT)
 OUTPUT = str(FEATURES_STEP2)
 
+# Columns of the output CSV (one row per pcap)
 FIELDS = [
     "analysis_id",
     "pcap_path",
@@ -25,6 +46,7 @@ FIELDS = [
 ]
 
 def extract_features(pcap_path):
+    # Ask tshark for three fields per packet: timestamp, length and protocol column
     command = [
         "tshark", "-n", "-r", pcap_path,
         "-T", "fields",
@@ -44,6 +66,7 @@ def extract_features(pcap_path):
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "TShark failed")
 
+    # Running totals over all packets of this pcap
     packet_count = 0
     total_bytes = 0
     timestamps = []
@@ -68,6 +91,7 @@ def extract_features(pcap_path):
         except ValueError:
             pass
 
+        # Map tshark's protocol name to one of our protocol groups
         protocol = protocol.strip().upper()
 
         if protocol == "TCP":
@@ -85,6 +109,7 @@ def extract_features(pcap_path):
         else:
             protocols["other"] += 1
 
+    # Capture duration = time between first and last packet
     duration = (
         max(timestamps) - min(timestamps)
         if len(timestamps) >= 2 else 0.0
@@ -106,6 +131,7 @@ def extract_features(pcap_path):
         "other_packets": protocols["other"]
     }
 
+# Find every .pcap file under the Cuckoo analyses folder
 pcaps = []
 
 for directory, subdirectories, filenames in os.walk(ROOT):
@@ -123,6 +149,7 @@ with open(OUTPUT, "w", newline="") as csvfile:
     writer.writeheader()
 
     for index, path in enumerate(pcaps, start=1):
+        # The Cuckoo task id is the name of the folder that holds the pcap
         analysis_id = os.path.basename(os.path.dirname(path))
 
         row = {
@@ -142,6 +169,8 @@ with open(OUTPUT, "w", newline="") as csvfile:
             "status": "ok"
         }
 
+        # Default row with zeros, overwritten by the extracted features; an empty or
+        # unreadable pcap keeps the zeros and gets a status instead
         try:
             row.update(extract_features(path))
             if row["packet_count"] == 0:
@@ -149,6 +178,7 @@ with open(OUTPUT, "w", newline="") as csvfile:
         except Exception as error:
             row["status"] = "error: " + str(error).replace("\n", " ")
 
+        # Write each row immediately so a crash does not lose finished work
         writer.writerow(row)
         csvfile.flush()
 

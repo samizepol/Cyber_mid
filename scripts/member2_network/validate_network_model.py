@@ -1,4 +1,13 @@
+"""
+validate_network_model.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Cross-validates the baseline network classifier (all numeric features, random forest) with
+stratified 5-fold CV and saves accuracy, macro-F1, macro-precision and macro-recall per fold
+to CV_RESULTS. Imputation and scaling happen inside each fold, so there is no leakage.
+
+Usage:  python validate_network_model.py
+"""
 import pandas as pd
 import numpy as np
 
@@ -9,11 +18,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestClassifier
 from config import DATASET, CV_RESULTS
 
-# Cargar el dataset original sin modificarlo.
+# Load the original dataset without modifying it.
 df = pd.read_csv(DATASET)
 df = df[(df["status"] == "ok") & df["family"].notna()].copy()
 
-# Usar solo características numéricas; excluir identificadores y etiquetas.
+# Use only numeric features; exclude identifiers and labels.
 excluded = {
     "analysis_id", "pcap_path", "sha256", "family",
     "label_agreement", "sample_id", "status"
@@ -31,10 +40,10 @@ print("Características:", len(features))
 print("\nMuestras por familia:")
 print(y.value_counts())
 
-# Cinco particiones estratificadas.
+# Five stratified folds.
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-# Imputación y escalado dentro de cada partición para evitar fugas.
+# Imputation and scaling inside each fold to avoid leakage.
 model = Pipeline([
     ("imputer", SimpleImputer(strategy="median")),
     ("scaler", StandardScaler()),
@@ -72,7 +81,7 @@ for metric in metrics:
         )
     )
 
-# Guardar las métricas para documentar el experimento.
+# Save the metrics to document the experiment.
 summary = pd.DataFrame({
     "fold": range(1, 6),
     "accuracy": results["test_accuracy"],

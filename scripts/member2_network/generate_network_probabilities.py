@@ -1,4 +1,14 @@
+"""
+generate_network_probabilities.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Alternative (official-split) version of the network model: trains the random forest on the
+TRAIN split only and outputs class probabilities for every sample, so the test rows can be
+used as a held-out set. The final project uses the cross-validated version instead
+(train_network_compatible_api.py), because LokiBot has no test samples.
+
+Usage:  python generate_network_probabilities.py
+"""
 import os
 import sys
 import joblib

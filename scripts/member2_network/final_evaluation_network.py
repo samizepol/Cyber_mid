@@ -1,4 +1,15 @@
+"""
+final_evaluation_network.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Out-of-fold evaluation of the reduced-feature random forest (experiment B of
+compare_network_features.py) on the first labelled network dataset. Saves the per-sample
+predictions (PREDICTIONS) and the confusion matrix (CONFUSION_MATRIX).
+Note: this is the earlier experiment; the final model used in the report and the hybrid is
+train_network_compatible_api.py.
+
+Usage:  python final_evaluation_network.py
+"""
 import pandas as pd
 import numpy as np
 
@@ -19,6 +30,7 @@ df = pd.read_csv(DATASET)
 df = df[(df["status"] == "ok") & df["family"].notna()].copy()
 df = df.reset_index(drop=True)
 
+# Identifier and label columns are never used as features
 excluded = {
     "analysis_id", "pcap_path", "sha256", "family",
     "label_agreement", "sample_id", "status"
@@ -32,7 +44,7 @@ features = [
 X = df[features].replace([np.inf, -np.inf], np.nan)
 y = df["family"].astype(str)
 
-# Características que se decidió retirar en el experimento B.
+# Features removed in experiment B (see compare_network_features.py).
 drop_features = [
     "ipv6_packets",
     "icmpv6_packets",
@@ -54,11 +66,11 @@ drop_features = [
 reduced_features = [c for c in features if c not in drop_features]
 X_reduced = X[reduced_features].copy()
 
-# Cinco particiones estratificadas y reproducibles.
+# Five stratified, reproducible folds.
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
-# Predicciones fuera de muestra: cada muestra es evaluada
-# por un modelo que no fue entrenado con esa muestra.
+# Out-of-fold predictions: every sample is predicted
+# by a model that was not trained on that sample.
 model = Pipeline([
     ("imputer", SimpleImputer(strategy="median")),
     ("classifier", RandomForestClassifier(
@@ -98,7 +110,7 @@ print("\nOrden de familias:", labels)
 print("Matriz de confusión:")
 print(cm)
 
-# Guardar las predicciones y métricas para documentar el resultado.
+# Save the predictions and metrics to document the result.
 output = df[["analysis_id", "sha256", "family"]].copy()
 output["predicted_family"] = predictions
 output["correct"] = output["family"] == output["predicted_family"]

@@ -1,4 +1,14 @@
+"""
+compare_network_features.py
+Member 3 - Network-Traffic Classification (Step 2)
 
+Feature-set experiment: compares, with the same 5-fold stratified cross-validation,
+  A - all numeric network features from the advanced extraction
+  B - a reduced set without constant or redundant features (list below)
+using a random forest. Prints accuracy and macro-F1 per fold and on average.
+
+Usage:  python compare_network_features.py
+"""
 import pandas as pd
 import numpy as np
 
@@ -10,9 +20,11 @@ from sklearn.ensemble import RandomForestClassifier
 
 from config import DATASET
 
+# Labelled network dataset; keep valid pcaps with a family label
 df = pd.read_csv(DATASET)
 df = df[(df["status"] == "ok") & df["family"].notna()].copy()
 
+# Identifier and label columns are never used as features
 excluded = {
     "analysis_id", "pcap_path", "sha256", "family",
     "label_agreement", "sample_id", "status"
@@ -23,7 +35,7 @@ all_features = [
     if c not in excluded
 ]
 
-# Modelo B: retirar constantes y algunas características redundantes.
+# Model B: drop constant features and some redundant ones.
 drop_features = [
     "ipv6_packets",
     "icmpv6_packets",
@@ -48,9 +60,11 @@ X_all = df[all_features].replace([np.inf, -np.inf], np.nan)
 X_reduced = df[reduced_features].replace([np.inf, -np.inf], np.nan)
 y = df["family"].astype(str)
 
+# Same 5 stratified folds for both feature sets, so the comparison is fair
 cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
 def make_model():
+    # Median imputation + scaling + random forest, all fitted inside each fold
     return Pipeline([
         ("imputer", SimpleImputer(strategy="median")),
         ("scaler", StandardScaler()),

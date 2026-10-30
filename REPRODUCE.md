@@ -58,8 +58,8 @@ Outputs go to `reports/final/`:
 |---|---|
 | A | 37/37 checks pass |
 | B | 18/18 metrics match; max difference 0.0004 (stacking, a scikit-learn version difference; all other methods identical) |
-| C | Pipeline tested end to end; numbers pending until `api_sequences.jsonl` is copied from the Drive |
-| D | Pipeline tested end to end; numbers pending until `network_dataset_labeled_270.csv` is available |
+| C | Logistic regression (the reported API model) and early fusion match exactly. The comparison random forest gives macro-F1 0.661 vs. 0.675 committed |
+| D | Macro-F1 0.557 vs. 0.559 committed (accuracy 0.554 vs. 0.558). Gap comes from the original training environment; random forests are sensitive to library versions. Reported results use the committed predictions (level B) |
 | E | Not re-run (lab VM only); documented below |
 
 ## 4. Level E: lab VM (documentation only)

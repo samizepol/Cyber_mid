@@ -17,6 +17,14 @@ B,late fusion: weighted delta_macro_f1_vs_api_mean,0.0391,0.0391,0.0,PASS,
 B,late fusion: stacking accuracy_mean,0.6889,0.6889,0.0,PASS,
 B,late fusion: stacking macro_f1_mean,0.6835,0.6835,0.0,PASS,
 B,late fusion: stacking delta_macro_f1_vs_api_mean,-0.0019,-0.0019,0.0,PASS,
-C,API classifier + early fusion,,,,SKIPPED,missing data\api\api_sequences.jsonl
-D,network classifier,,,,SKIPPED,missing data\network\network_dataset_labeled_270.csv
+C,API classifier: tfidf_lr accuracy,0.6962962962962963,0.6962962962962963,0.0,PASS,
+C,API classifier: tfidf_lr macro_f1,0.6895010590003925,0.6895010590003925,0.0,PASS,
+C,API classifier: tfidf_rf accuracy,0.6814814814814815,0.6666666666666666,0.014814814814814836,FAIL,
+C,API classifier: tfidf_rf macro_f1,0.6753105335214462,0.6614301479816405,0.01388038553980575,FAIL,
+C,early fusion: api_features accuracy_mean,0.6841,0.6841,0.0,PASS,
+C,early fusion: api_features macro_f1_mean,0.6729,0.6729,0.0,PASS,
+C,early fusion: api_features+net_proba accuracy_mean,0.6877,0.6877,0.0,PASS,
+C,early fusion: api_features+net_proba macro_f1_mean,0.6804,0.6804,0.0,PASS,
+D,network classifier: StratifiedKFold_5 oof_accuracy,0.5576208178438662,0.5539033457249071,0.0037174721189591198,FAIL,
+D,network classifier: StratifiedKFold_5 oof_macro_f1,0.5594284783963589,0.5570356102825772,0.0023928681137816987,FAIL,
 E,"Cuckoo analysis (traces, pcaps)",,,,SKIPPED,lab VM only - see REPRODUCE.md

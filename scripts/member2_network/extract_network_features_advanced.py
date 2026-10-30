@@ -1,4 +1,19 @@
 #!/usr/bin/env python3
+"""
+extract_network_features_advanced.py
+Member 3 - Network-Traffic Classification (Step 2)
+
+Second, richer feature extraction used for the feature-set experiments. For each analysis
+listed in FEATURES_CLEAN it runs tshark on the pcap and computes:
+  - size and timing: total bytes, average packet size, duration, mean/max inter-arrival time
+  - protocol counts: packets containing ARP, IPv4/6, TCP, UDP, ICMP, DNS, HTTP, TLS, LLMNR,
+    NBNS, SSDP, SMB, DHCP, NetBIOS (a packet can count for several protocols)
+  - host and flow diversity: unique IPs, IP pairs, ports, TCP/UDP flows (5-tuples)
+  - TCP flag counts: SYN, ACK, FIN, RST
+Output: FEATURES_ADVANCED. Existing files are never overwritten (the script stops instead).
+
+Usage (lab machine, needs tshark):  python extract_network_features_advanced.py
+"""
 import csv
 import os
 import subprocess
@@ -10,6 +25,7 @@ INPUT_CSV = str(FEATURES_CLEAN)
 OUTPUT_CSV = str(FEATURES_ADVANCED)
 TEMP_CSV = OUTPUT_CSV + ".tmp"
 
+# Packet fields requested from tshark (one tab-separated line per packet)
 FIELDS = [
     "frame.time_epoch", "frame.len", "frame.protocols",
     "ip.src", "ip.dst", "ipv6.src", "ipv6.dst",
@@ -19,6 +35,7 @@ FIELDS = [
     "udp.srcport", "udp.dstport"
 ]
 
+# Feature name -> protocol names that count for it (matched in frame.protocols)
 PROTOCOLS = {
     "arp_packets": {"arp"},
     "ipv4_packets": {"ip"},
@@ -56,6 +73,7 @@ COLUMNS = BASE_COLUMNS + list(PROTOCOLS.keys()) + EXTRA_COLUMNS
 
 
 def empty_row(analysis_id, path, status):
+    # Row with every feature at 0, used for missing, empty or failed pcaps
     row = {c: 0 for c in COLUMNS}
     row["analysis_id"] = analysis_id
     row["pcap_path"] = path
@@ -68,6 +86,7 @@ def field(values, index):
 
 
 def extract(analysis_id, path):
+    # Compute all features of one pcap (see the module docstring)
     if not os.path.isfile(path):
         return empty_row(analysis_id, path, "missing_pcap")
 
@@ -119,6 +138,7 @@ def extract(analysis_id, path):
             if tokens.intersection(names):
                 row[feature] += 1
 
+        # IPv4 address if present, otherwise IPv6
         src = field(values, 3) or field(values, 5)
         dst = field(values, 4) or field(values, 6)
 
@@ -131,6 +151,8 @@ def extract(analysis_id, path):
         if src and dst:
             ip_pairs.add(tuple(sorted((src, dst))))
 
+        # TCP flags and flows; a flow is the sorted pair (ip:port, ip:port), so both
+        # directions of a connection count once
         tcp_sport, tcp_dport = field(values, 7), field(values, 8)
 
         if "tcp" in tokens:
@@ -158,6 +180,7 @@ def extract(analysis_id, path):
         row["status"] = "empty"
         return row
 
+    # Aggregate statistics over all packets
     row["total_bytes"] = sum(sizes)
     if sizes:
         row["average_packet_bytes"] = round(sum(sizes) / len(sizes), 4)

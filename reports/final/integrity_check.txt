@@ -1,0 +1,39 @@
+[PASS] samples.csv: unique sample_id  (540 rows)
+[PASS] samples.csv: unique sha256
+[PASS] samples.csv: 270 ok Cuckoo runs  (270 ok)
+[PASS] samples.csv: unique Cuckoo task ids  (285 runs)
+[PASS] samples.csv: ok runs are the 5 evaluated families  ({'agenttesla': 59, 'formbook': 58, 'amadey': 55, 'asyncrat': 54, 'lokibot': 44})
+[PASS] API OOF: no duplicate sample_id  (270 rows)
+[PASS] API OOF: every sample is in samples.csv
+[PASS] API OOF: family == samples.csv final_label
+[PASS] API OOF: split == samples.csv split
+[PASS] API OOF: only ok Cuckoo runs
+[PASS] API OOF: only the 5 evaluated families  (agenttesla, amadey, asyncrat, formbook, lokibot)
+[PASS] API OOF: probabilities in [0, 1]
+[PASS] API OOF: probability rows sum to 1  (min 1.0000, max 1.0000)
+[PASS] API OOF: stored prediction == argmax(probabilities)  (0 mismatches)
+[PASS] network OOF: no duplicate sample_id  (269 rows)
+[PASS] network OOF: every sample is in samples.csv
+[PASS] network OOF: family == samples.csv final_label
+[PASS] network OOF: split == samples.csv split
+[PASS] network OOF: only ok Cuckoo runs
+[PASS] network OOF: only the 5 evaluated families  (agenttesla, amadey, asyncrat, formbook, lokibot)
+[PASS] network OOF: probabilities in [0, 1]
+[PASS] network OOF: probability rows sum to 1  (min 1.0000, max 1.0000)
+[PASS] network OOF: stored prediction == argmax(probabilities)  (0 mismatches)
+[PASS] hybrid OOF (weighted): no duplicate sample_id  (269 rows)
+[PASS] hybrid OOF (weighted): every sample is in samples.csv
+[PASS] hybrid OOF (weighted): family == samples.csv final_label
+[PASS] hybrid OOF (weighted): split == samples.csv split
+[PASS] hybrid OOF (weighted): only ok Cuckoo runs
+[PASS] hybrid OOF (weighted): only the 5 evaluated families  (agenttesla, amadey, asyncrat, formbook, lokibot)
+[PASS] hybrid OOF (weighted): probabilities in [0, 1]
+[PASS] hybrid OOF (weighted): probability rows sum to 1  (min 1.0000, max 1.0000)
+[PASS] hybrid OOF (weighted): stored prediction == argmax(probabilities)  (0 mismatches)
+[PASS] API covers every ok sample  (270 samples)
+[PASS] API vs network: only the known gap differs  (only in one file: ['S0001'])
+[PASS] hybrid = API intersect network  (269 samples)
+[PASS] API test split: every sample has split == test  (32 samples, families: ['agenttesla', 'amadey', 'asyncrat', 'formbook'])
+[PASS] git: no binaries, archives or pcaps tracked  (65 files)
+
+37/37 checks passed

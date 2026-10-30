@@ -1,0 +1,7 @@
+method,group,n,accuracy,accuracy_ci_low,accuracy_ci_high,macro_f1
+api_lr,high confidence (agree/partial),149,0.7785,0.7047,0.8456,0.7532
+api_lr,low confidence (disagree/no_avclass),120,0.5917,0.5,0.675,0.5531
+network,high confidence (agree/partial),149,0.6309,0.5569,0.7047,0.6285
+network,low confidence (disagree/no_avclass),120,0.4667,0.3833,0.5583,0.4452
+weighted,high confidence (agree/partial),149,0.8188,0.7517,0.8792,0.8059
+weighted,low confidence (disagree/no_avclass),120,0.6167,0.5331,0.7,0.5844

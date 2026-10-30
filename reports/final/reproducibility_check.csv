@@ -1,0 +1,22 @@
+level,check,committed,regenerated,abs_diff,status,note
+B,late fusion: api_only accuracy_mean,0.6952,0.6952,0.0,PASS,
+B,late fusion: api_only macro_f1_mean,0.6854,0.6854,0.0,PASS,
+B,late fusion: api_only delta_macro_f1_vs_api_mean,0.0,0.0,0.0,PASS,
+B,late fusion: network_only accuracy_mean,0.5576,0.5576,0.0,PASS,
+B,late fusion: network_only macro_f1_mean,0.556,0.556,0.0,PASS,
+B,late fusion: network_only delta_macro_f1_vs_api_mean,-0.1293,-0.1293,0.0,PASS,
+B,late fusion: mean accuracy_mean,0.71,0.71,0.0,PASS,
+B,late fusion: mean macro_f1_mean,0.7038,0.7038,0.0,PASS,
+B,late fusion: mean delta_macro_f1_vs_api_mean,0.0184,0.0184,0.0,PASS,
+B,late fusion: product accuracy_mean,0.7174,0.7174,0.0,PASS,
+B,late fusion: product macro_f1_mean,0.7117,0.7117,0.0,PASS,
+B,late fusion: product delta_macro_f1_vs_api_mean,0.0264,0.0264,0.0,PASS,
+B,late fusion: weighted accuracy_mean,0.7298,0.7298,0.0,PASS,
+B,late fusion: weighted macro_f1_mean,0.7245,0.7245,0.0,PASS,
+B,late fusion: weighted delta_macro_f1_vs_api_mean,0.0391,0.0391,0.0,PASS,
+B,late fusion: stacking accuracy_mean,0.6889,0.6889,0.0,PASS,
+B,late fusion: stacking macro_f1_mean,0.6835,0.6835,0.0,PASS,
+B,late fusion: stacking delta_macro_f1_vs_api_mean,-0.0019,-0.0019,0.0,PASS,
+C,API classifier + early fusion,,,,SKIPPED,missing data\api\api_sequences.jsonl
+D,network classifier,,,,SKIPPED,missing data\network\network_dataset_labeled_270.csv
+E,"Cuckoo analysis (traces, pcaps)",,,,SKIPPED,lab VM only - see REPRODUCE.md

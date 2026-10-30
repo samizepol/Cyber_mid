@@ -21,6 +21,7 @@ It is the network-analysis component (Step 2) of the Cyber_mid hybrid malware cl
 | `extract_network_features_step2.py` | Extract initial network features |
 | `extract_network_features_advanced.py` | Extract additional network statistics |
 | `train_network_classifier.py` | Train the baseline classifier |
+| `train_network_compatible_api.py` | Final model: OOF probabilities on the 269 API-compatible samples (used by the hybrid) |
 | `validate_network_model.py` | Evaluate the baseline using cross-validation |
 | `compare_network_features.py` | Compare feature sets |
 | `final_evaluation_network.py` | Generate out-of-fold predictions and metrics |
@@ -28,14 +29,19 @@ It is the network-analysis component (Step 2) of the Cyber_mid hybrid malware cl
 
 ## Experimental results
 
-The reduced-feature model was evaluated on 101 labeled samples across five malware families.
+Final model (`train_network_compatible_api.py`): Random Forest on 11 packet/protocol
+statistics, evaluated with stratified 5-fold cross-validation (seed 42, out-of-fold
+predictions) on the **269 samples** that also have an API trace (5 families).
 
-- Accuracy: 0.6238
-- Macro F1-score: 0.6761
+- Accuracy: 0.558
+- Macro F1-score: 0.559
 
-The model performed best on Amadey and AsyncRAT in this experiment. FormBook was more difficult to distinguish, particularly from AgentTesla.
+Per-family results are in `reports/network/RESULTS.md`. Amadey (F1 0.64) and LokiBot (0.60)
+are recognised best; AgentTesla and FormBook are often confused with each other.
 
-These results are preliminary. The dataset is small and imbalanced, and feature selection was informed by earlier exploratory analysis. They should not be interpreted as a guarantee of performance on unseen malware.
+An earlier experiment on 101 samples (macro-F1 0.676) used a smaller, imbalanced subset and
+feature selection informed by exploratory analysis; it is superseded by the 269-sample result.
+The comparison with the API and hybrid models is in `reports/final/results_table.md`.
 
 ## Requirements and data
 

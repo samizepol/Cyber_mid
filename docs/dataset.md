@@ -174,12 +174,16 @@ Master table: `data/metadata/samples.csv` (one row per sample, 540 rows).
 
 ### 6.2 Final dataset used for classification
 
-**Scope decision:** because of time constraints, the classifier uses the **5 families
-that were fully analyzed**. njrat, redline, remcos and smokeloader were selected but not
-analyzed. **LokiBot was excluded**: its 15 unanalyzed samples were all in the val/test
-splits (0 test samples, 3 val samples), so it could not be evaluated fairly.
+**Scope decision:** because of time constraints, the classifiers use the **5 families
+that were analyzed**. njrat, redline, remcos and smokeloader were selected but not
+analyzed. **LokiBot is included**, but its 15 unanalyzed samples were all in the val/test
+splits, so it has 0 test samples and 3 val samples. For this reason all models are
+evaluated with 5-fold cross-validation over all ok samples, and the fixed test split is
+only a 4-family reference (`docs/evaluation.md`).
 
-Only samples with `analysis_status = ok` are used: **5 families, 286 samples**.
+Only samples with `analysis_status = ok` are used: **5 families, 270 samples**.
+269 of them also have a network row (S0001 is missing from the network data); all
+model comparisons use these 269.
 
 | Family | Train | Val | Test | Total |
 |---|---|---|---|---|
@@ -187,8 +191,8 @@ Only samples with `analysis_status = ok` are used: **5 families, 286 samples**.
 | amadey | 38 | 9 | 8 | 55 |
 | asyncrat | 39 | 9 | 6 | 54 |
 | formbook | 40 | 9 | 9 | 58 |
-| lokibot | 42 | 9 | 9 | 60 |
-| **Total** | **200** | **45** | **41** | **286** |
+| lokibot | 41 | 3 | 0 | 44 |
+| **Total** | **199** | **39** | **32** | **270** |
 
 Output statistics of the final set (median, min–max):
 
@@ -200,8 +204,8 @@ Output statistics of the final set (median, min–max):
 | formbook | 8,561 (1,837 – 351,006) | 132 (110 – 789) |
 | lokibot | 10,147 (395 – 402,894) | 162.5 (113 – 238) |
 
-Label agreement in the final set: 126 agree, 40 partial, 90 disagree, 44 no_avclass
-(55.3% agree or partial).
+Label agreement in the final set: 115 agree, 35 partial, 76 disagree, 44 no_avclass
+(55.6% agree or partial).
 
 ---
 
@@ -225,12 +229,13 @@ Label agreement in the final set: 126 agree, 40 partial, 90 disagree, 44 no_avcl
    results may not generalize to other families or sources.
 8. **Single sandbox configuration.** All samples are analyzed with one guest OS,
    timeout and network setting.
-9. **Reduced scope.** Only 4 of the 9 selected families were used (226 samples). Four
-   families were not analyzed in time and LokiBot was excluded because none of its test
-   samples were analyzed. Results apply to these 4 families only.
-10. **Small evaluation set.** The test split has 32 samples (asyncrat only 6), so test
-    accuracy has high variance; results should be reported per family and, ideally,
-    with cross-validation on train + val.
+9. **Reduced scope.** Only 5 of the 9 selected families were used (270 samples). Four
+   families were not analyzed in time. LokiBot has fewer samples (44) and none in the
+   test split. Results apply to these 5 families only.
+10. **Small evaluation set.** The test split has 32 samples from 4 families (asyncrat only
+    6, lokibot 0), so test accuracy has high variance. Results are therefore reported with
+    cross-validation over all 269 samples, per family and with confidence intervals
+    (`docs/evaluation.md`).
 11. **Failed and evasive runs.** 8 runs failed and 7 were marked evasive (mostly amadey and
     asyncrat). Excluding them may bias the dataset toward samples that behave normally in
     the sandbox.

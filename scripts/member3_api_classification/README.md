@@ -6,9 +6,9 @@ Classifies malware families from Cuckoo API-call sequences (midterm Step 1).
 ```bash
 pip install pandas scikit-learn joblib matplotlib
 export API_TRACE_DIR=~/malware_lab/api_traces      # folder with <sha256>_<taskid>.json
-python scripts/api_classification/01_extract_sequences.py
-python scripts/api_classification/02_train_api_classifier.py
-python scripts/api_classification/03_plot_results.py
+python scripts/member3_api_classification/01_extract_sequences.py
+python scripts/member3_api_classification/02_train_api_classifier.py
+python scripts/member3_api_classification/03_plot_results.py
 ```
 
 ## Pipeline

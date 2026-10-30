@@ -1,0 +1,2 @@
+method,n,families,accuracy,macro_f1_4_families
+api_lr (official split),32,"agenttesla, amadey, asyncrat, formbook",0.7812,0.778

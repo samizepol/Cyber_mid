@@ -1,5 +1,7 @@
 
 import os
+from pathlib import Path
+
 import joblib
 import numpy as np
 import pandas as pd
@@ -10,11 +12,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.metrics import accuracy_score, f1_score, classification_report
 
-BASE = "/mnt/data/Cyber_mid_repo"
+# Paths relative to the repository root (was hard-coded to /mnt/data/...), so the script
+# runs on any machine. CYBER_MID_ROOT can still point to another checkout.
+BASE = os.environ.get("CYBER_MID_ROOT", str(Path(__file__).resolve().parents[2]))
 DATA = os.path.join(
     BASE, "data/network/network_dataset_labeled_270.csv"
 )
-API_OOF = "/mnt/data/api_oof_predictions.csv"
+API_OOF = os.path.join(BASE, "reports/api/api_oof_predictions.csv")
 
 OUT_DIR = os.path.join(BASE, "data/network")
 OOF_OUT = os.path.join(OUT_DIR, "network_oof_predictions_compatible_api.csv")

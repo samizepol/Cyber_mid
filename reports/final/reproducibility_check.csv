@@ -14,9 +14,9 @@ B,late fusion: product delta_macro_f1_vs_api_mean,0.0264,0.0264,0.0,PASS,
 B,late fusion: weighted accuracy_mean,0.7298,0.7298,0.0,PASS,
 B,late fusion: weighted macro_f1_mean,0.7245,0.7245,0.0,PASS,
 B,late fusion: weighted delta_macro_f1_vs_api_mean,0.0391,0.0391,0.0,PASS,
-B,late fusion: stacking accuracy_mean,0.6889,0.6885,0.00039999999999995595,PASS,
-B,late fusion: stacking macro_f1_mean,0.6835,0.6831,0.00039999999999995595,PASS,
-B,late fusion: stacking delta_macro_f1_vs_api_mean,-0.0019,-0.0023,0.00039999999999999996,PASS,
-C,API classifier + early fusion,,,,SKIPPED,missing data/api/api_sequences.jsonl
-D,network classifier,,,,SKIPPED,missing data/network/network_dataset_labeled_270.csv
+B,late fusion: stacking accuracy_mean,0.6889,0.6889,0.0,PASS,
+B,late fusion: stacking macro_f1_mean,0.6835,0.6835,0.0,PASS,
+B,late fusion: stacking delta_macro_f1_vs_api_mean,-0.0019,-0.0019,0.0,PASS,
+C,API classifier + early fusion,,,,SKIPPED,missing data\api\api_sequences.jsonl
+D,network classifier,,,,SKIPPED,missing data\network\network_dataset_labeled_270.csv
 E,"Cuckoo analysis (traces, pcaps)",,,,SKIPPED,lab VM only - see REPRODUCE.md

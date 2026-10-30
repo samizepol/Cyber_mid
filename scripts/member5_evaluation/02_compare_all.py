@@ -149,7 +149,7 @@ def main():
     cfg.OUT_DIR.mkdir(parents=True, exist_ok=True)
 
     table = master_table(df)
-    table.round(4).to_csv(cfg.RESULTS_CSV, index=False)
+    table.round(6).to_csv(cfg.RESULTS_CSV, index=False)
     cfg.RESULTS_MD.write_text(to_markdown(table), encoding="utf-8")
     print(to_markdown(table))
 

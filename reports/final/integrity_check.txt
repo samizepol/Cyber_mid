@@ -34,6 +34,6 @@
 [PASS] API vs network: only the known gap differs  (only in one file: ['S0001'])
 [PASS] hybrid = API intersect network  (269 samples)
 [PASS] API test split: every sample has split == test  (32 samples, families: ['agenttesla', 'amadey', 'asyncrat', 'formbook'])
-[PASS] git: no binaries, archives or pcaps tracked  (65 files)
+[PASS] git: no binaries, archives or pcaps tracked  (94 files)
 
 37/37 checks passed
